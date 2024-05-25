@@ -28,13 +28,14 @@ class BST {
     }
     int depthTree(NODE* root) {
         if (root == nullptr) return 0;
-        return std::max(depthTree(root->left), depthtTree(root->right)) + 1;
+        return std::max(depthTree(root->left), depthTree(root->right)) + 1;
     }
     NODE* searchTree(NODE* root, const T& value) {
         if (root == nullptr || root->value == value) return root;
         if (value < root->value) return searchTree(root->left, value);
         return searchTree(root->right, value);
     }
+
  public:
     BST() : root(nullptr) {}
     void insert(const T& value) { root = insertNODE(root, value); }
