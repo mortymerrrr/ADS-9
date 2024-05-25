@@ -1,22 +1,24 @@
 // Copyright 2021 NNTU-CS
-#include <iostream>
-#include <fstream>
-#include <locale>
-#include <cstdlib>
-#include "bst.h"
+#include  <iostream>
+#include  <fstream>
+#include  <locale>
+#include  <cstdlib>
+#include  "bst.h"
 
 BST<std::string> makeTree(const char* filename) {
-  BST<std::string> bstTree;
+  BST<std::string> BSTtree;
   std::ifstream file(filename);
-  std::string currentWord;
+  std::string Res;
   while (!file.eof()) {
-    char character = file.get();
-    if ((character >= 'A' && character <= 'Z') || (character >= 'a' && character <= 'z')) {
-      currentWord += std::tolower(character);
-    } else if (!currentWord.empty()) {
-      bstTree.insert(currentWord);
-      currentWord.clear();
+    char S = file.get();
+    if (S >= 'A' && S <= 'Z')
+        S = S + ('a' - 'A');
+    if (S >= 'a' && S <= 'z') {
+      Res += S;
+    } else {
+      BSTtree.insert(Res);
+      Res.clear();
     }
   }
-  return bstTree;
+  return BSTtree;
 }
