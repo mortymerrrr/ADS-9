@@ -2,50 +2,50 @@
 #ifndef INCLUDE_BST_H_
 #define INCLUDE_BST_H_
 #include <algorithm>
-
 template <typename T>
 class BST {
  private:
-    struct TreeNode {
+    struct NODE {
         T value;
-        int frequency;
-        TreeNode *left, *right;
+        int cnt;
+        NODE *left, *right;
     };
-    TreeNode* rootNode;
-
-    TreeNode* insertNode(TreeNode* node, const T& value) {
-        if (node == nullptr) {
-            node = new TreeNode{value, 1, nullptr, nullptr};
-        } else if (node->value > value) {
-            node->left = insertNode(node->left, value);
-        } else if (node->value < value) {
-            node->right = insertNode(node->right, value);
+    NODE* root;
+    NODE* insertNODE(NODE* root, const T& value) {
+        if (root == nullptr) {
+            root = new NODE;
+            root->value = value;
+            root->cnt = 1;
+            root->left = root->right = nullptr;
+        } else if (root->value > value) {
+            root->left = insertNODE(root->left, value);
+        } else if (root->value < value) {
+            root->right = insertNODE(root->right, value);
         } else {
-            node->frequency++;
+            root->cnt += 1;
         }
-        return node;
+        return root;
     }
-
-    int getHeight(TreeNode* node) {
-        return (node == nullptr) ? 0 : std::max(getHeight(node->left), getHeight(node->right)) + 1;
+    int depthTree(NODE* root) {
+        if (root == nullptr) return 0;
+        return std::max(depthTree(root->left), depthtTree(root->right)) + 1;
     }
-
-    TreeNode* findNode(TreeNode* node, const T& value) {
-        if (node == nullptr || node->value == value) return node;
-        return (value < node->value) ? findNode(node->left, value) : findNode(node->right, value);
+    NODE* searchTree(NODE* root, const T& value) {
+        if (root == nullptr || root->value == value) return root;
+        if (value < root->value) return searchTree(root->left, value);
+        return searchTree(root->right, value);
     }
-
  public:
-    BST() : rootNode(nullptr) {}
-
-    void insert(const T& value) { rootNode = insertNode(rootNode, value); }
-
-    int getDepth() { return getHeight(rootNode) - 1; }
-
-    int getFrequency(const T& value) {
-        TreeNode* currentNode = findNode(rootNode, value);
-        return (currentNode == nullptr) ? 0 : currentNode->frequency;
+    BST() : root(nullptr) {}
+    void insert(const T& value) { root = insertNODE(root, value); }
+    int depth() { return depthTree(root) - 1; }
+    int search(const T& value) {
+        NODE* curr = searchTree(root, value);
+        if (curr == nullptr) {
+            return 0;
+        } else {
+            return curr->cnt;
+        }
     }
 };
-
 #endif  // INCLUDE_BST_H_
